@@ -50,7 +50,7 @@
             text = $('#ciudad').val();
             $.getJSON('api/hotel?ciudad=' + text, function (contactsJsonPayload) {
                 contactsJsonPayload = JSON.parse(contactsJsonPayload);
-                console.log(contactsJsonPayload);
+                $('#contacts').html("");
                 $(contactsJsonPayload.HotelListResponse.HotelList.HotelSummary).each(function (i, item) {
                     $('#contacts').append('<li>' + item.name + '</li>');
                 });
