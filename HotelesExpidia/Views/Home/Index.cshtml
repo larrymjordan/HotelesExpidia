@@ -27,6 +27,7 @@
                 $('#hotels').html("");
                 len = contactsJsonPayload.HotelListResponse.HotelList.HotelSummary.length;                
                 $(contactsJsonPayload.HotelListResponse.HotelList.HotelSummary).each(function (i, item) {
+                    $('#separacion').html("Existen " + len + " hoteles para " + text);
                     txtimg = getUrlImg(item.thumbNailUrl);
                     txtDescription = item.shortDescription;
                     txtDescription = txtDescription.replace("&lt;p&gt;&lt;b&gt;Property Location&lt;/b&gt; &lt;br /&gt;", "");                    
