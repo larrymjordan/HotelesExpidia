@@ -1,74 +1,57 @@
 ﻿<header>
-    <div class="content-wrapper">
-        <div class="float-left">
-            <p class="site-title">
-                <a href="~/">Hoteles</a></p>
-        </div>
-    </div>
+
 </header>
-<div id="body">     
-    <div id="tab-box">
-        <div id="tab-1" class="tab">
-            <span>
-                <a href="#tab-1">Por Nombre</a>
-            </span>
-            <span>
-                <p>
-                    <label for="contactId">Ciudad:</label>
-                    <input type="text" name="ciudad" id="ciudad" />
-                </p>
-                <input type="button" id="search" value="Buscar" onclick="getHotelXCiudad();" />    
-                <ul id="contacts"></ul>
-            </span>
+<div id="body"> 
+    <div id="search-div">
+        <div id="search-subdiv"> 
+            <h2>Search 325,000 hotels and 360 airlines worldwide </h2> 
+            <span class="title-span">Ciudad</span>                          
+            <p>                
+                <input type="text" name="ciudad" id="ciudad" />
+            </p>            
+            <button onclick="getHotelXCiudad();"> <span>Search</span> </button>                       
         </div>
-        <div id="tab-2" class="tab">
-            <span>
-                <a href="#tab-2">Por Posicion</a>
-            </span>
-            <span>
-                <p>TODO</p>
-               <!-- <p>
-                    <label for="contactId">Latitud:</label>
-                    <input type="text" name="lat" id="lat" />
-                </p>
-                <p>
-                    <label for="contactId">Longitud:</label>
-                    <input type="text" name="lon" id="lon" />
-                </p>
-                <input type="button" id="search2" value="Buscar" onclick="getSitioXPosicion();" />
-                <ul id="contacts2"></ul> -->
-            </span>
-        </div>   
-    </div>
+    </div>    
+    <div id="content">
+        <div id="separacion">Existen mas de 325,000 hoteles en el Mundo!</div>
+        <div id="hotels"></div>                                             
+     </div>
 </div>
 
 @section scripts{
     <script type="text/javascript">
-        window.location.hash = '#tab-1';
-
         function getHotelXCiudad() {
             text = $('#ciudad').val();
             $.getJSON('api/hotel?ciudad=' + text, function (contactsJsonPayload) {
                 contactsJsonPayload = JSON.parse(contactsJsonPayload);
-                $('#contacts').html("");
+                $('#hotels').html("");
+                len = contactsJsonPayload.HotelListResponse.HotelList.HotelSummary.length;                
                 $(contactsJsonPayload.HotelListResponse.HotelList.HotelSummary).each(function (i, item) {
-                    $('#contacts').append('<li>' + item.name + '</li>');
+                    txtimg = getUrlImg(item.thumbNailUrl);
+                    txtDescription = item.shortDescription;
+                    txtDescription = txtDescription.replace("&lt;p&gt;&lt;b&gt;Property Location&lt;/b&gt; &lt;br /&gt;", "");                    
+                    
+                    $('#hotels').append('<div class="section-hotel">'+
+                        '<div class="sub-section-hotel"><img width="255" src="' + txtimg + '" /></div>' +
+                        '<div class="sub-section-hotel description">'+
+                            '<span class="fly-rigth">' + item.hotelRating + '/5</span>' +
+                            '<a href="#"><strong>' + item.name + '</strong></a><br />' + item.locationDescription +
+                            '<p>' + txtDescription + '</p>' +
+                        '</div>'+
+                    '</div>');
                 });
             });
         }
 
-        /* function getSitioXPosicion() {
-            lat = $('#lat').val();
-            lon = $('#lon').val();
-            $.getJSON('http://ejer-topicos01.azurewebsites.net/api/sitios/?lat=' + lat + '&lon=' + lon, function (contactsJsonPayload) {
-                contactsJsonPayload = JSON.parse(contactsJsonPayload);
-                console.log(contactsJsonPayload);
-                $('#contacts2').html("");
-                $(contactsJsonPayload).each(function (i, item) {
-                    $('#contacts2').append('<li>' + item.Nombre + '</li>');
-                });
-            });
-        }*/
+        function getUrlImg(url) {
+            if (url !== "") {
+                a = url.split(".");
+                txt = 'http://media2.expedia.com/' + a[0].substring(1, a[0].length - 1) + 'l.' + a[1];
+            } else {
+                txt = '/Images/no-img.png';
+            }
+            return txt;
+        }
     </script>
 }
 
