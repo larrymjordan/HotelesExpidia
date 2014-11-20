@@ -20,6 +20,32 @@
 
 @section scripts{
     <script type="text/javascript">
+        function showHotel(hotelId) {
+            $.getJSON('api/hotel/' + hotelId, function (hotelDetails) {
+                hotelDetails = JSON.parse(hotelDetails);
+                console.log(hotelDetails);
+                $('#hotels').html("");
+
+                // INFORMACION GENERAL DEL HOTEL.
+                $('#separacion').html(
+                    "<span class='hotel-name'>" + hotelDetails.HotelInformationResponse.HotelSummary.name + "</span>" +
+                    "<span class='hotel-description'>" + hotelDetails.HotelInformationResponse.HotelDetails.amenitiesDescription + "</span>");
+
+                // IMAGENES DEL INTERIOR DEL HOTEL.
+                $('#hotels').append("<div style='width:210px; margin-left:auto; margin-right:auto'>")
+                $(hotelDetails.HotelInformationResponse.HotelImages.HotelImage).each(function (i, img) {
+                    $('#hotels').append('<img src="' + img.thumbnailUrl + '" alt="' + img.hotelImageId + '" />');
+                });
+                $('#hotels').append('</div>');
+
+                // TIPOS DE CUARTO.
+                $(hotelDetails.HotelInformationResponse.RoomTypes.RoomType).each(function (i, room) {
+                    $('#hotels').append('<span class="room-type">' + room.description + '</span>');
+                    $('#hotels').append('<span class="room-description">'+room.descriptionLong+'</span>');
+                });
+            })
+        }
+
         function getHotelXCiudad() {
             text = $('#ciudad').val();
             $.getJSON('api/hotel?ciudad=' + text, function (contactsJsonPayload) {
@@ -36,7 +62,7 @@
                         '<div class="sub-section-hotel"><img width="255" src="' + txtimg + '" /></div>' +
                         '<div class="sub-section-hotel description">'+
                             '<span class="fly-rigth">' + item.hotelRating + '/5</span>' +
-                            '<a href="#"><strong>' + item.name + '</strong></a><br />' + item.locationDescription +
+                            '<a href="#" onclick="showHotel('+item.hotelId+')"><strong>' + item.name + '</strong></a><br />' + item.locationDescription +
                             '<p>' + txtDescription + '</p>' +
                         '</div>'+
                     '</div>');
