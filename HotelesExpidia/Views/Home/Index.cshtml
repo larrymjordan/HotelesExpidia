@@ -23,7 +23,6 @@
         function showHotel(hotelId) {
             $.getJSON('api/hotel/' + hotelId, function (hotelDetails) {
                 hotelDetails = JSON.parse(hotelDetails);
-                console.log(hotelDetails);
                 $('#hotels').html("");
 
                 // INFORMACION GENERAL DEL HOTEL.
