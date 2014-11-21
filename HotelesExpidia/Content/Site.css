@@ -71,6 +71,8 @@ input, button {
 #rooms {
     border: 0.235294em solid #00335d;
     border-radius: 0.176471em;            
+    margin-top: 15px;
+    display:none;
 }
 #form-room {
     border-color: #c7c7c7;
@@ -81,9 +83,13 @@ input, button {
     padding:20px;
     position: relative;
 }
+#adultSelect {
+
+}
 .form-sec-room {
-    display:inline-block;
+    display:inline-table;
     margin-right:15px;
+    vertical-align: top;
 }
 .sel-selector {
     background: -moz-linear-gradient(center top , #f5f5f5 0%, #e7e7e7 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
@@ -92,7 +98,7 @@ input, button {
     color: #1f1f1f;
     font-size: 0.882353em;
     min-height: 2.4em;
-    margin: 0;
+    margin: 0 0 15px;
     vertical-align: baseline;
     height: 2.4em;
     padding: 0.4em;

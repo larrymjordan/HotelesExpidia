@@ -30,10 +30,11 @@ namespace HotelesExpidia.Controllers
             return respuesta;
         }
 
-        public string GetRoomById(string id, string desde, string hasta, string room)
+        public string GetRoomById(string obj)
         {
+            Console.WriteLine(obj);
             WebClient clienteTom = new WebClient();
-            string respuesta = clienteTom.DownloadString("https://api.eancdn.com/ean-services/rs/hotel/v3/avail?cid=55505&minorRev=99&apiKey=cbrzfta369qwyrm9t5b8y8kf&locale=en_US&currencyCode=USD&hotelId=" + id + "&arrivalDate=12/20/2014&departureDate=12/22/2014&includeDetails=true&room1=2&_type=json");
+            string respuesta = clienteTom.DownloadString("https://api.eancdn.com/ean-services/rs/hotel/v3/avail?cid=55505&minorRev=99&apiKey=cbrzfta369qwyrm9t5b8y8kf&locale=en_US&currencyCode=USD&hotelId=1&arrivalDate=12/20/2014&departureDate=12/22/2014&includeDetails=true&room1=2&_type=json");
             return respuesta;
         }
     }
