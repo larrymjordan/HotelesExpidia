@@ -15,11 +15,52 @@
     <div id="content">
         <div id="separacion">Existen mas de 325,000 hoteles en el Mundo!</div>
         <div id="hotels"></div>                                             
-     </div>
+    </div>
+
+    <div id="reservation-form" title="Make a reservation">
+        <form action="api/room" class="reservation-form">
+            <label>Arrival date</label>
+            <input type="date" name="arrivalDate" id="arrivalDate" format="MM/dd/yyyy" value="" />
+            <label>Departure date</label>
+            <input type="date" name="departureDate" id="departureDate" format="MM/dd/yyyy" value="" />
+            <label>How many adults people?</label>
+            <input type="number" name="room1" id="room1" value="" />
+        </form>
+    </div>
 </div>
 
 @section scripts{
     <script type="text/javascript">
+        var dialog;
+
+        function showFormReservation() {
+           dialog.dialog("open");
+        }
+
+        function searchRoomsAvailable() {
+            $.getJSON('api/room?arrivalDate=' + $('#arrivalDate').val() +
+                               '&departureDate=' + $('#departureDate').val() +
+                               '&room1=' + $('#room1').val(), function (roomsAvailable) {
+                console.log(roomsAvailable)
+            })
+        }
+
+        dialog = $('#reservation-form' ).dialog({
+            autoOpen: false,
+            height: 380,
+            width: 410,
+            modal: true,
+            buttons: {
+                'Search Rooms Available': searchRoomsAvailable,
+                Cancel: function () {
+                    dialog.dialog("close");
+                }
+            },
+            close: function () {
+                form[0].reset();
+            }
+         })
+
         function showHotel(hotelId) {
             $.getJSON('api/hotel/' + hotelId, function (hotelDetails) {
                 hotelDetails = JSON.parse(hotelDetails);
@@ -28,7 +69,8 @@
                 // INFORMACION GENERAL DEL HOTEL.
                 $('#separacion').html(
                     "<span class='hotel-name'>" + hotelDetails.HotelInformationResponse.HotelSummary.name + "</span>" +
-                    "<span class='hotel-description'>" + hotelDetails.HotelInformationResponse.HotelDetails.amenitiesDescription + "</span>");
+                    "<span class='hotel-description'>" + hotelDetails.HotelInformationResponse.HotelDetails.amenitiesDescription + "</span>"+
+                    "<div class='reservation'><button onclick='showFormReservation()'>Make a reservation</button></div>");
 
                 // IMAGENES DEL INTERIOR DEL HOTEL.
                 $('#hotels').append("<div style='width:210px; margin-left:auto; margin-right:auto'>")

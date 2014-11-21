@@ -145,3 +145,36 @@ input, button {
     color: rgb(145, 145, 145);
 }
 
+.reservation {
+    text-align: right;
+    width:98%;
+    padding-top: 15px
+}
+
+.reservation button {
+    background: #0065b8;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 14px 14px;
+    border: none;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    cursor: pointer;
+}
+
+.reservation-form {
+    font-size: 16px
+}
+
+.reservation-form label{
+    display: block;
+    color: gray
+}
+
+.reservation-form input {
+    display: block;
+    width: 96%;
+    margin-bottom: 12px
+}
+
