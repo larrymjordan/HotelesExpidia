@@ -9,17 +9,68 @@
             <p>                
                 <input type="text" name="ciudad" id="ciudad" />
             </p>            
-            <button onclick="getHotelXCiudad();"> <span>Search</span> </button>                       
+            <button class="button" onclick="getHotelXCiudad();"> <span>Search</span> </button>                       
         </div>
     </div>    
     <div id="content">
         <div id="separacion">Existen mas de 325,000 hoteles en el Mundo!</div>
         <div id="hotels"></div>                                             
-     </div>
+        <div id="rooms">
+            <h3 class="availability-header">Choose your room</h3>
+            <div id="form-room">
+                <div class="form-sec-room">
+                    <label class="label" for="datepicker">Check-in</label> 
+                    <input type="text" name="fechaDesde" id="fechaDesde">
+                </div>
+                <div class="form-sec-room">
+                    <label class="label" for="datepicker">Check-out</label> 
+                    <input type="text" name="fechaHasta" id="fechaHasta">
+                </div>
+                <div class="form-sec-room">
+                    <label class="label">Rooms</label> 
+                    <select class="sel-selector">  
+                        <option selected="selected">1</option>  
+                        <option>2</option>  <option>3</option>  
+                        <option>4</option>  <option>5</option>  
+                        <option>6</option>  <option>7</option>  
+                        <option>8</option>  
+                    </select>
+                </div>
+                <div class="form-sec-room">
+                    <label class="label">Adults</label> 
+                    <select class="sel-selector" name="adultCountInput">  
+                        <option>1</option>  <option selected="selected">2</option>  
+                        <option>3</option>  <option>4</option>  
+                        <option>5</option>  <option>6</option>  
+                        <option>7</option>  <option>8</option>  
+                        <option>9</option>  <option>10</option>  
+                        <option>11</option>  <option>12</option>  
+                        <option>13</option>  <option>14</option>  
+                    </select>                    
+                </div>
+                <button class="button" onclick=""> <span>Update</span> </button>
+            </div>
+            <div id="room-available"></div>
+        </div>                                                     
+    </div>
 </div>
 
 @section scripts{
-    <script type="text/javascript">
+    <script type="text/javascript">  
+        $("#fechaDesde").datepicker();
+        $("#fechaDesde").datepicker("option", "dateFormat", "mm-dd-yy");
+        $("#fechaDesde").datepicker('setDate', new Date());
+        $("#fechaHasta").datepicker();
+        $("#fechaHasta").datepicker("option", "dateFormat", "mm-dd-yy");
+        $("#fechaHasta").datepicker('setDate', new Date());
+
+        function showRoomAvailable(hotelId) {
+            $.getJSON('api/hotel/?id=' + hotelId + '&desde=p&hasta=c&room=', function (roomDetails) {
+                roomDetails = JSON.parse(roomDetails);
+               console.info(roomDetails);
+            });
+        }
+
         function showHotel(hotelId) {
             $.getJSON('api/hotel/' + hotelId, function (hotelDetails) {
                 hotelDetails = JSON.parse(hotelDetails);
@@ -63,6 +114,7 @@
                             '<span class="fly-rigth">' + item.hotelRating + '/5</span>' +
                             '<a href="#" onclick="showHotel('+item.hotelId+')"><strong>' + item.name + '</strong></a><br />' + item.locationDescription +
                             '<p>' + txtDescription + '</p>' +
+                            '<button style="position: absolute;right: 10px;" class="button" onclick="showRoomAvailable(' + item.hotelId + ')"> <span>Reservar</span> </button>  ' +
                         '</div>'+
                     '</div>');
                 });
