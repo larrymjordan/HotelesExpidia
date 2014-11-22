@@ -21,11 +21,11 @@
                 <form id="form-room-available">
                 <div class="form-sec-room">
                     <label class="label" for="datepicker">Check-in</label> 
-                    <input type="text" name="fechaDesde" id="fechaDesde">
+                    <input type="text" name="arrivalDate" id="arrivalDate">
                 </div>
                 <div class="form-sec-room">
                     <label class="label" for="datepicker">Check-out</label> 
-                    <input type="text" name="fechaHasta" id="fechaHasta">
+                    <input type="text" name="departureDate" id="departureDate">
                 </div>
                 <div class="form-sec-room">
                     <label class="label">Rooms</label> 
@@ -40,7 +40,7 @@
                 <div class="form-sec-room">                    
                     <div id="adultSelect">
                         <label class="label">Adults</label> 
-                        <select class="sel-selector" name="adultCountInput1">  
+                        <select class="sel-selector" name="room1">  
                             <option>1</option>  <option selected="selected">2</option>  
                             <option>3</option>  <option>4</option>  
                             <option>5</option>  <option>6</option>  
@@ -62,13 +62,13 @@
 @section scripts{
     <script type="text/javascript">  
         var idHotel;
-        $("#fechaDesde").datepicker();
-        $("#fechaDesde").datepicker("option", "dateFormat", "mm-dd-yy");
-        $("#fechaDesde").datepicker('setDate', new Date());
-        $("#fechaHasta").datepicker();
-        $("#fechaHasta").datepicker("option", "dateFormat", "mm-dd-yy");
-        $("#fechaHasta").datepicker('setDate', new Date());
-
+        $("#arrivalDate").datepicker();
+        $("#arrivalDate").datepicker("option", "dateFormat", "mm/dd/yy");
+        $("#arrivalDate").datepicker('setDate', new Date());
+        $("#departureDate").datepicker();
+        $("#departureDate").datepicker("option", "dateFormat", "mm/dd/yy");
+        $("#departureDate").datepicker('setDate', new Date());
+      
         function showRoomAvailableForm(hotelId) {
             idHotel = hotelId;
             $('#separacion').html("");
@@ -84,22 +84,29 @@
             
         }
 
-        $("#form-room-available").submit(function (event) {
-            //console.log($(this).serializeArray());
-            //            event.preventDefault();   
-            var objForm = "";
-            //console.log(objForm);
-            $(this).serializeArray().forEach(function(entry) {
-                //objForm.push(entry);
-                console.log(entry);
-                objForm += entry.name + "," + entry.value + ";";
+        $("#form-room-available").submit(function (event) {            
+            var objForm = "hotelId=" + idHotel + ";";
+            $(this).serializeArray().forEach(function (entry) {
+                if (entry.name != "roomCountInput") {
+                    objForm += entry.name + "=" + entry.value + ";";
+                }
             });
-            console.log(objForm);
-                //var jsonParm = JSON.parse(objForm);
-            return false;
-            /*$.getJSON('api/hotel?obj='+$(this).serializeArray(), function (contactsJsonPayload) {
-                console.log(contactsJsonPayload);
-            });*/
+            objForm = objForm.substring(0, objForm.length - 1);
+            $.getJSON('api/hotel?obj=' + objForm, function (roomAvailable) {
+                $("#room-available").html("");
+                roomAvailable = JSON.parse(roomAvailable);
+                console.log(roomAvailable.HotelRoomAvailabilityResponse.HotelRoomResponse);
+                $(roomAvailable.HotelRoomAvailabilityResponse.HotelRoomResponse).each(function (i, room) {
+                    $('#room-available').append('<h3 style="color: #0065b8;margin-bottom: 5px;">' + room.rateDescription + '</h3>');
+                    $(room.BedTypes.BedType).each(function (i, bedType) {
+                        $('#room-available').append('<span>' + bedType.description + '</span><br />');
+                    });
+                    $(room.ValueAdds.ValueAdd).each(function (i, ValueAdd) {
+                        $('#room-available').append('<span>' + ValueAdd.description + '</span><br />');
+                    });
+                });
+            });
+            return false;            
         });
 
         function showHotel(hotelId) {
@@ -172,7 +179,7 @@
             room = $("#roomCountInput").val();
             $("#adultSelect").append('<label class="label" style="margin-left: 55px;">Adults</label> ');
             for (i = 0; i < room; i++) {
-                $("#adultSelect").append('<label class="label" style="display:inline;margin-right: 15px;">Room' + (i + 1) + '</label><select class="sel-selector" name="adultCountInput' + (i + 1) + '"><option>1</option><option selected="selected">2</option> ' +
+                $("#adultSelect").append('<label class="label" style="display:inline;margin-right: 15px;">Room' + (i + 1) + '</label><select class="sel-selector" name="room' + (i + 1) + '"><option>1</option><option selected="selected">2</option> ' +
                             '<option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option>'+
                             '<option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option></select> <br />');
             }

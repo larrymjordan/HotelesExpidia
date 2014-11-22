@@ -22,7 +22,9 @@ input, button {
     min-height: 2.4em;
     padding-left: 1em;   
 }
-
+#room-available {
+    padding: 0 0 20px 20px;
+}
 #search-div {
     background-image: url("/Images/fondo.png");
     margin: 0 0 0 -2px;
